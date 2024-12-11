@@ -1,0 +1,14 @@
+﻿@model User
+
+<h2>Вход</h2>
+<form asp-action="Login" method="post">
+    <div>
+        <label>Логин</label>
+        <input type="text" name="username" required />
+    </div>
+    <div>
+        <label>Пароль</label>
+        <input type="password" name="password" required />
+    </div>
+    <button type="submit">Войти</button>
+</form>

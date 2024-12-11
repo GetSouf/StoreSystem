@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to Electronics Store System</h1>
+    <p class="lead">Efficiently manage your store operations with ease!</p>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <a asp-controller="Products" asp-action="Index" class="btn btn-primary btn-lg btn-block">Manage Products</a>
+        </div>
+        <div class="col-md-6 mb-3">
+            <a asp-controller="Categories" asp-action="Index" class="btn btn-secondary btn-lg btn-block">Manage Categories</a>
+        </div>
+        <div class="col-md-6 mb-3">
+            <a asp-controller="Orders" asp-action="Index" class="btn btn-success btn-lg btn-block">View Orders</a>
+        </div>
+        <div class="col-md-6 mb-3">
+            <a asp-controller="Customers" asp-action="Index" class="btn btn-info btn-lg btn-block">Customer Management</a>
+        </div>
+        <div class="col-md-6 mb-3">
+            <a asp-controller="Suppliers" asp-action="Index" class="btn btn-warning btn-lg btn-block">Manage Suppliers</a>
+        </div>
+        <div class="col-md-6 mb-3">
+            <a asp-controller="Reports" asp-action="Index" class="btn btn-dark btn-lg btn-block">Generate Reports</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn {
+        font-size: 1.25rem;
+        padding: 1rem;
+        border-radius: 10px;
+    }
+
+    .btn-block {
+        display: block;
+        width: 100%;
+    }
+
+    .container {
+        max-width: 800px;
+    }
+</style>
