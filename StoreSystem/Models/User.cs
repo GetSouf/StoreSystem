@@ -10,9 +10,11 @@ namespace StoreSystem.Models
 
         [Required]
         [MaxLength(100)]
+        [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "Логин должен содержать только буквы и цифры.")]
         public string Username { get; set; } = null!;
 
         [Required]
+        [MinLength(6, ErrorMessage = "Пароль должен быть не менее 6 символов.")]
         [MaxLength(100)]
         public string PasswordHash { get; set; } = null!; // Захэшированный пароль
 

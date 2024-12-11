@@ -16,6 +16,7 @@ namespace StoreSystem
             builder.Services.AddAuthentication("CookieAuth")
                             .AddCookie("CookieAuth", options =>
                              {
+                                 
                                   options.LoginPath = "/Account/Login"; // Путь к странице входа
                                   options.AccessDeniedPath = "/Account/AccessDenied"; // Путь к странице отказа в доступе
                              });

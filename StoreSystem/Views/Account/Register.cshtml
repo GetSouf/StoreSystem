@@ -1,0 +1,17 @@
+﻿@model User
+
+<form asp-action="Register" method="post">
+    <div class="form-group">
+        <label>Логин</label>
+        <input type="text" name="username" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Пароль</label>
+        <input type="password" name="password" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Роль</label>
+        @Html.DropDownList("postId", (SelectList)ViewData["PostId"], "Выберите роль", new { @class = "form-control" })
+    </div>
+    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+</form>

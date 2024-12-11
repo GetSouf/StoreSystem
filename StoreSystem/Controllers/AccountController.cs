@@ -5,6 +5,7 @@ using System.Security.Claims;
 using StoreSystem.Models;
 using testproject.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 public class AccountController : Controller
 {
@@ -56,5 +57,43 @@ public class AccountController : Controller
     public IActionResult AccessDenied()
     {
         return View();
+    }
+    public IActionResult Register()
+    {
+        ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Name");
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Register(string username, string password, int postId)
+    {
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+        {
+            ModelState.AddModelError("", "Логин и пароль обязательны.");
+            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Name", postId);
+            return View();
+        }
+
+        // Проверяем, существует ли пользователь
+        if (_context.Users.Any(u => u.Username == username))
+        {
+            ModelState.AddModelError("", "Пользователь с таким логином уже существует.");
+            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Name", postId);
+            return View();
+        }
+
+        // Добавляем нового пользователя
+        var user = new User
+        {
+            Username = username,
+            PasswordHash = password, // Хэшируйте пароль перед сохранением
+            PostId = postId
+        };
+
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("Login");
     }
 }
