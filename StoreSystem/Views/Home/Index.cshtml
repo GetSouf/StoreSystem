@@ -1,11 +1,14 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="text-center">
+        <h1 class="display-4">Welcome to Electronics Store System</h1>
+        <p class="lead">Efficiently manage your store operations with ease!</p>
+    </div>
+}
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Electronics Store System</h1>
-    <p class="lead">Efficiently manage your store operations with ease!</p>
-</div>
 
 <div class="container mt-5">
     <div class="row">

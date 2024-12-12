@@ -29,7 +29,8 @@ namespace StoreSystem.Models
         public DateTime HireDate { get; set; }= DateTime.Now;
 
         [Required]
-        [Range(0, double.MaxValue)]
+        [Range(0, double.MaxValue, ErrorMessage = "Зарплата должна быть больше 0")]
         public decimal Salary { get; set; } // Зарплата
+
     }
 }

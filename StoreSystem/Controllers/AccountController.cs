@@ -51,7 +51,7 @@ public class AccountController : Controller
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync("CookieAuth");
-        return RedirectToAction("Login", "Account");
+        return RedirectToAction("Index", "Home");
     }
 
     public IActionResult AccessDenied()
@@ -96,4 +96,5 @@ public class AccountController : Controller
 
         return RedirectToAction("Login");
     }
+    
 }
