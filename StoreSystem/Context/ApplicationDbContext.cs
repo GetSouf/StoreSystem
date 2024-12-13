@@ -21,6 +21,7 @@ namespace testproject.Models
         public DbSet<ProductSupplier> ProductSuppliers { get; set; } = null!;
         public DbSet<Rating> Ratings { get; set; } = null!;
         public DbSet<User> Users { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

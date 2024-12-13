@@ -58,20 +58,24 @@ public class AccountController : Controller
     {
         return View();
     }
+
+
+
     public IActionResult Register()
     {
-        ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Name");
+        // Получаем список сотрудников для выпадающего списка
+        ViewBag.EmployeeId = new SelectList(_context.Employees.Include(e => e.Post), "Id", "FirstName");
         return View();
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Register(string username, string password, int postId)
+    public async Task<IActionResult> Register(string username, string password, int employeeId)
     {
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
             ModelState.AddModelError("", "Логин и пароль обязательны.");
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Name", postId);
+            ViewBag.EmployeeId = new SelectList(_context.Employees.Include(e => e.Post), "Id", "FirstName", employeeId);
             return View();
         }
 
@@ -79,7 +83,16 @@ public class AccountController : Controller
         if (_context.Users.Any(u => u.Username == username))
         {
             ModelState.AddModelError("", "Пользователь с таким логином уже существует.");
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Name", postId);
+            ViewBag.EmployeeId = new SelectList(_context.Employees.Include(e => e.Post), "Id", "FirstName", employeeId);
+            return View();
+        }
+
+        // Извлекаем сотрудника и его должность
+        var employee = await _context.Employees.Include(e => e.Post).FirstOrDefaultAsync(e => e.Id == employeeId);
+        if (employee == null)
+        {
+            ModelState.AddModelError("", "Выбранный сотрудник не найден.");
+            ViewBag.EmployeeId = new SelectList(_context.Employees.Include(e => e.Post), "Id", "FirstName", employeeId);
             return View();
         }
 
@@ -87,8 +100,9 @@ public class AccountController : Controller
         var user = new User
         {
             Username = username,
-            PasswordHash = password, // Хэшируйте пароль перед сохранением
-            PostId = postId
+            PasswordHash = password, // Здесь можно добавить хэширование
+            EmployeeId = employee.Id,
+            PostId = employee.PostId // Устанавливаем должность, связанную с сотрудником
         };
 
         _context.Users.Add(user);
@@ -96,5 +110,6 @@ public class AccountController : Controller
 
         return RedirectToAction("Login");
     }
-    
+
+
 }

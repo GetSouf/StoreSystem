@@ -23,5 +23,11 @@ namespace StoreSystem.Models
 
         [ForeignKey("PostId")]
         public Post Post { get; set; } = null!; // Навигационное свойство для роли
+
+        [Required]
+        public int EmployeeId { get; set; } // Внешний ключ для работника
+
+        [ForeignKey("EmployeeId")]
+        public Employee Employee { get; set; } = null!; // Навигационное свойство для работника
     }
 }

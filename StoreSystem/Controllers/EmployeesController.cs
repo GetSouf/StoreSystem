@@ -61,9 +61,14 @@ namespace StoreSystem.Controllers
         {
             if (ModelState.IsValid)
             {
+                employee.HireDate = DateTime.UtcNow;
                 _context.Add(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                Console.WriteLine("хз");
             }
             ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Name", employee.PostId);
             return View(employee);

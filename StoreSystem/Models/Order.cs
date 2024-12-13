@@ -22,7 +22,7 @@ namespace StoreSystem.Models
         public Employee Employee { get; set; } = null!; // Навигационное свойство
 
         [Required]
-        public DateTime OrderDate { get; set; } // Дата заказа
+        public DateTime OrderDate { get; set; }  // Дата заказа по умолчанию
 
         [Required]
         [Range(0.01, double.MaxValue)]
@@ -30,4 +30,5 @@ namespace StoreSystem.Models
 
         public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>(); // Детали заказа
     }
+
 }

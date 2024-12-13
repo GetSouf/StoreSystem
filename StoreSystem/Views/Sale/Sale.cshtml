@@ -1,0 +1,88 @@
+﻿@model SaleViewModel
+
+<div class="container">
+    <h2>Продажа товара</h2>
+
+    <!-- Секция идентификации покупателя -->
+    <div id="customer-section">
+        <h3>Идентификация покупателя</h3>
+        <div>
+            <label>Выберите покупателя:</label>
+            <select id="customer-select" class="form-control">
+                <option value="">Выберите покупателя</option>
+                @foreach (var customer in Model.Customers)
+                {
+                    <option value="@customer.Id">@customer.FirstName @customer.LastName</option>
+                }
+            </select>
+        </div>
+        <div>
+            <button id="create-customer-btn" class="btn btn-secondary">Добавить нового покупателя</button>
+            <button id="continue-without-customer" class="btn btn-primary">Продолжить без покупателя</button>
+        </div>
+    </div>
+
+    <!-- Место для формы добавления нового покупателя -->
+    <div id="create-customer-form" style="display: none; margin-top: 20px;">
+        <h4>Новый покупатель</h4>
+        <form id="add-customer-form">
+            <div class="form-group">
+                <label>Имя</label>
+                <input type="text" id="customer-firstname" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label>Фамилия</label>
+                <input type="text" id="customer-lastname" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="customer-email" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label>Телефон</label>
+                <input type="text" id="customer-phone" class="form-control" />
+            </div>
+            <button type="button" id="save-customer-btn" class="btn btn-success">Сохранить</button>
+            <button type="button" id="cancel-customer-btn" class="btn btn-danger">Отмена</button>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <!-- Поиск и фильтрация -->
+    <div class="col-md-3">
+        <h4>Фильтры</h4>
+        <div class="form-group">
+            <label>Поиск по названию:</label>
+            <input type="text" id="search-box" class="form-control" placeholder="Введите название товара..." />
+        </div>
+        <div class="form-group">
+            <label>Категория:</label>
+            <select id="category-filter" class="form-control">
+                <option value="">Все категории</option>
+                @foreach (var category in Model.Categories)
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <!-- Список товаров -->
+    <div class="col-md-6">
+        <h4>Товары</h4>
+        <div id="product-list">
+            <p>Выберите категорию, чтобы увидеть товары.</p>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <h4>Корзина</h4>
+        <div id="cart">
+            <!-- Выбранные товары будут отображаться здесь -->
+        </div>
+        <div class="form-group">
+            <strong>Итого: <span id="total-price">0</span> ₽</strong>
+        </div>
+        <button id="create-order-btn" class="btn btn-primary">Создать заказ</button>
+    </div>
+</div>

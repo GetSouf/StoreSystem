@@ -49,18 +49,23 @@ namespace StoreSystem.Controllers
         }
 
         // POST: Customers/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Email,Phone,Address,RegistrationDate")] Customer customer)
         {
             if (ModelState.IsValid)
             {
+                customer.RegistrationDate = DateTime.UtcNow;
+
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            else
+            {
+                Console.WriteLine("не валид");
+            }
+
             return View(customer);
         }
 
@@ -146,6 +151,28 @@ namespace StoreSystem.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
+        public IActionResult Add([FromBody] Customer model)
+        {
+            if (string.IsNullOrEmpty(model.FirstName) || string.IsNullOrEmpty(model.LastName) || string.IsNullOrEmpty(model.Email))
+            {
+                return Json(new { success = false, message = "Имя, фамилия и email обязательны." });
+            }
+
+            var customer = new Customer
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                Phone = model.Phone,
+                RegistrationDate = DateTime.Now
+            };
+
+            _context.Customers.Add(customer);
+            _context.SaveChanges();
+
+            return Json(new { success = true, customerId = customer.Id });
         }
 
         private bool CustomerExists(int id)

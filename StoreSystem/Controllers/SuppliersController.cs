@@ -11,6 +11,7 @@ using testproject.Models;
 
 namespace StoreSystem.Controllers
 {
+
     public class SuppliersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -21,14 +22,14 @@ namespace StoreSystem.Controllers
         }
 
         // GET: Suppliers
-        [Authorize(Roles = "Директор,Замдиректора")]
+        [Authorize(Roles = "Директор,Заместитель директора")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Suppliers.ToListAsync());
         }
 
         // GET: Suppliers/Details/5
-        [Authorize(Roles = "Директор,Замдиректора")]
+        [Authorize(Roles = "Директор,Заместитель директора")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,7 +46,7 @@ namespace StoreSystem.Controllers
 
             return View(supplier);
         }
-        [Authorize(Roles = "Директор,Замдиректора")]
+        [Authorize(Roles = "Директор,Заместитель директора")]
 
         // GET: Suppliers/Create
         public IActionResult Create()
@@ -56,7 +57,7 @@ namespace StoreSystem.Controllers
         // POST: Suppliers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Директор,Замдиректора")]
+        [Authorize(Roles = "Директор,Заместитель директора")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,ContactName,Phone,Email")] Supplier supplier)
@@ -71,7 +72,7 @@ namespace StoreSystem.Controllers
         }
 
         // GET: Suppliers/Edit/5
-        [Authorize(Roles = "Директор,Замдиректора")]
+        [Authorize(Roles = "Директор,   ")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,7 +91,7 @@ namespace StoreSystem.Controllers
         // POST: Suppliers/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Директор,Замдиректора")]
+        [Authorize(Roles = "Директор,Заместитель директора")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ContactName,Phone,Email")] Supplier supplier)
@@ -124,7 +125,7 @@ namespace StoreSystem.Controllers
         }
 
         // GET: Suppliers/Delete/5
-        [Authorize(Roles = "Директор,Замдиректора")]
+        [Authorize(Roles = "Директор,Заместитель директора")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -143,7 +144,7 @@ namespace StoreSystem.Controllers
         }
 
         // POST: Suppliers/Delete/5
-        [Authorize(Roles = "Директор,Замдиректора")]
+        [Authorize(Roles = "Директор,Заместитель директора")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

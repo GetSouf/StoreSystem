@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using testproject.Models;
 
 namespace StoreSystem.Controllers
 {
+    [Authorize(Roles = "Директор,Заместитель директора")]
     public class OrdersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -63,9 +65,14 @@ namespace StoreSystem.Controllers
         {
             if (ModelState.IsValid)
             {
+                order.OrderDate = DateTime.UtcNow;
                 _context.Add(order);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                Console.WriteLine("не валид");
             }
             ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Email", order.CustomerId);
             ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "FirstName", order.EmployeeId);

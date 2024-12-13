@@ -32,9 +32,14 @@ namespace testproject.Models
         public string? Address { get; set; } // Адрес
 
         [Required]
-        public DateTime RegistrationDate { get; set; } = DateTime.Now;
+
+        public DateTime RegistrationDate { get; set; } 
+
+
 
         public ICollection<Order> Orders { get; set; } = new List<Order>(); // Связь с заказами
+
+
 
     }
 }

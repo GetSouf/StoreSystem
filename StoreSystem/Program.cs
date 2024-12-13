@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using StoreSystem.Models;
+using System;
 using testproject.Models;
 
 namespace StoreSystem
@@ -29,6 +31,31 @@ namespace StoreSystem
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.MapPost("/api/createOrder", async (HttpContext context, ApplicationDbContext db) =>
+            {
+                var requestBody = await context.Request.ReadFromJsonAsync<OrderRequest>();
+                if (requestBody == null || !requestBody.OrderDetails.Any())
+                {
+                    return Results.BadRequest("Корзина пуста или данные некорректны.");
+                }
+
+                // Вычисляем общую сумму
+                decimal totalAmount = requestBody.OrderDetails.Sum(od => od.Price * od.Quantity);
+
+                var order = new Order
+                {
+                    CustomerId = requestBody.CustomerId,
+                    EmployeeId = requestBody.EmployeeId,
+                    OrderDate = DateTime.Now,
+                    TotalAmount = totalAmount,
+                    OrderDetails = requestBody.OrderDetails
+                };
+
+                db.Orders.Add(order);
+                await db.SaveChangesAsync();
+
+                return Results.Ok(new { orderId = order.Id, message = "Заказ успешно создан!" });
+            });
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

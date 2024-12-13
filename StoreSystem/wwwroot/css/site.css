@@ -20,3 +20,52 @@ html {
 body {
   margin-bottom: 60px;
 }
+/* Карточка товара */
+.product-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+    .product-card h5 {
+        margin-bottom: 10px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .product-card button {
+        margin-top: 10px;
+    }
+
+/* Элемент корзины */
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fefefe;
+}
+
+    .cart-item span {
+        flex: 1;
+        text-align: center;
+    }
+
+    .cart-item .item-total {
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    /* Кнопки + и - */
+    .cart-item .btn {
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        text-align: center;
+    }
