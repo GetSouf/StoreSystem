@@ -228,7 +228,61 @@ namespace StoreSystem.Controllers
 
             return View(salesReport);
         }
+        public async Task<IActionResult> ProductSalesReport(string sortOrder)
+        {
+            // Параметры для сортировки
+            ViewData["ProductSortParam"] = string.IsNullOrEmpty(sortOrder) ? "product_desc" : "";
+            ViewData["CategorySortParam"] = sortOrder == "category" ? "category_desc" : "category";
+            ViewData["SupplierSortParam"] = sortOrder == "supplier" ? "supplier_desc" : "supplier";
+            ViewData["PriceSortParam"] = sortOrder == "price" ? "price_desc" : "price";
+            ViewData["QuantitySortParam"] = sortOrder == "quantity" ? "quantity_desc" : "quantity";
+            ViewData["SalesCountSortParam"] = sortOrder == "sales_count" ? "sales_count_desc" : "sales_count";
 
+            // Запрос с использованием навигационных свойств
+            var productSalesQuery = _context.OrderDetails
+                .Include(od => od.Product)
+                    .ThenInclude(p => p.Category)
+                .Include(od => od.Product)
+                    .ThenInclude(p => p.ProductSuppliers)
+                        .ThenInclude(ps => ps.Supplier)
+                .GroupBy(od => new
+                {
+                    ProductName = od.Product.Name,
+                    CategoryName = od.Product.Category.Name,
+                    SupplierName = od.Product.ProductSuppliers
+                        .Select(ps => ps.Supplier.Name).FirstOrDefault(),
+                    od.Price
+                })
+                .Select(g => new ProductSalesReportViewModel
+                {
+                    ProductName = g.Key.ProductName,
+                    CategoryName = g.Key.CategoryName,
+                    SupplierName = g.Key.SupplierName ?? "Не указан",
+                    Price = g.Key.Price,
+                    QuantitySold = g.Sum(od => od.Quantity),
+                    SalesCount = g.Count()
+                });
+
+            // Сортировка
+            productSalesQuery = sortOrder switch
+            {
+                "product_desc" => productSalesQuery.OrderByDescending(p => p.ProductName),
+                "category" => productSalesQuery.OrderBy(p => p.CategoryName),
+                "category_desc" => productSalesQuery.OrderByDescending(p => p.CategoryName),
+                "supplier" => productSalesQuery.OrderBy(p => p.SupplierName),
+                "supplier_desc" => productSalesQuery.OrderByDescending(p => p.SupplierName),
+                "price" => productSalesQuery.OrderBy(p => p.Price),
+                "price_desc" => productSalesQuery.OrderByDescending(p => p.Price),
+                "quantity" => productSalesQuery.OrderBy(p => p.QuantitySold),
+                "quantity_desc" => productSalesQuery.OrderByDescending(p => p.QuantitySold),
+                "sales_count" => productSalesQuery.OrderBy(p => p.SalesCount),
+                "sales_count_desc" => productSalesQuery.OrderByDescending(p => p.SalesCount),
+                _ => productSalesQuery.OrderBy(p => p.ProductName),
+            };
+
+            var productSales = await productSalesQuery.ToListAsync();
+            return View(productSales);
+        }
 
 
 

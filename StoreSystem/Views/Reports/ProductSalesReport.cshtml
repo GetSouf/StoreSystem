@@ -1,0 +1,45 @@
+﻿@model IEnumerable<StoreSystem.Models.ProductSalesReportViewModel>
+
+@{
+    ViewData["Title"] = "Отчёт по продажам товаров";
+}
+
+<h2>Отчёт по продажам товаров</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="ProductSalesReport" asp-route-sortOrder="@ViewData["ProductSortParam"]">Товар</a>
+            </th>
+            <th>
+                <a asp-action="ProductSalesReport" asp-route-sortOrder="@ViewData["CategorySortParam"]">Категория</a>
+            </th>
+            <th>
+                <a asp-action="ProductSalesReport" asp-route-sortOrder="@ViewData["SupplierSortParam"]">Поставщик</a>
+            </th>
+            <th>
+                <a asp-action="ProductSalesReport" asp-route-sortOrder="@ViewData["PriceSortParam"]">Цена</a>
+            </th>
+            <th>
+                <a asp-action="ProductSalesReport" asp-route-sortOrder="@ViewData["QuantitySortParam"]">Количество продано</a>
+            </th>
+            <th>
+                <a asp-action="ProductSalesReport" asp-route-sortOrder="@ViewData["SalesCountSortParam"]">Количество продаж</a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ProductName</td>
+                <td>@item.CategoryName</td>
+                <td>@item.SupplierName</td>
+                <td>@item.Price.ToString("C")</td>
+                <td>@item.QuantitySold</td>
+                <td>@item.SalesCount</td>
+            </tr>
+        }
+    </tbody>
+</table>
