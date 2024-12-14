@@ -49,7 +49,7 @@ namespace StoreSystem.Controllers
         }
 
         // GET: Orders/Create
-        public IActionResult Create()
+        public IActionResult Create1()
         {
             ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Email");
             ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "FirstName");
@@ -63,9 +63,10 @@ namespace StoreSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CustomerId,EmployeeId,OrderDate,TotalAmount")] Order order)
         {
+
             if (ModelState.IsValid)
             {
-                order.OrderDate = DateTime.UtcNow;
+                
                 _context.Add(order);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

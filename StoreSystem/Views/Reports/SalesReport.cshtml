@@ -1,0 +1,85 @@
+﻿@model IEnumerable<StoreSystem.Models.SalesReportViewModel>
+
+@{
+    ViewData["Title"] = "Отчёт по продажам";
+}
+
+<h2>Отчёт по продажам</h2>
+
+<!-- Фильтр по датам -->
+<form asp-action="SalesReport" method="get" class="form-inline mb-3">
+    <div class="form-group mr-2">
+        <label for="startDate" class="mr-2">Дата начала:</label>
+        <input type="date" name="startDate" id="startDate" class="form-control" value="@ViewBag.StartDate" />
+    </div>
+    <div class="form-group mr-2">
+        <label for="endDate" class="mr-2">Дата окончания:</label>
+        <input type="date" name="endDate" id="endDate" class="form-control" value="@ViewBag.EndDate" />
+    </div>
+    <button type="submit" class="btn btn-primary">Фильтровать</button>
+</form>
+
+<!-- Таблица отчёта -->
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="SalesReport" asp-route-sortOrder="@ViewData["OrderIdSortParam"]"
+                   asp-route-startDate="@ViewBag.StartDate" asp-route-endDate="@ViewBag.EndDate">
+                    Номер заказа
+                </a>
+            </th>
+            <th>
+                <a asp-action="SalesReport" asp-route-sortOrder="@ViewData["DateSortParam"]"
+                   asp-route-startDate="@ViewBag.StartDate" asp-route-endDate="@ViewBag.EndDate">
+                    Дата заказа
+                </a>
+            </th>
+            <th>
+                <a asp-action="SalesReport" asp-route-sortOrder="@ViewData["CustomerSortParam"]"
+                   asp-route-startDate="@ViewBag.StartDate" asp-route-endDate="@ViewBag.EndDate">
+                    Покупатель
+                </a>
+            </th>
+            <th>
+                <a asp-action="SalesReport" asp-route-sortOrder="@ViewData["EmployeeSortParam"]"
+                   asp-route-startDate="@ViewBag.StartDate" asp-route-endDate="@ViewBag.EndDate">
+                    Сотрудник
+                </a>
+            </th>
+            <th>
+                <a asp-action="SalesReport" asp-route-sortOrder="@ViewData["ProductCountSortParam"]"
+                   asp-route-startDate="@ViewBag.StartDate" asp-route-endDate="@ViewBag.EndDate">
+                    Количество товаров
+                </a>
+            </th>
+            <th>
+                <a asp-action="SalesReport" asp-route-sortOrder="@ViewData["TotalAmountSortParam"]"
+                   asp-route-startDate="@ViewBag.StartDate" asp-route-endDate="@ViewBag.EndDate">
+                    Общая сумма
+                </a>
+            </th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.OrderId</td>
+                <td>@item.OrderDate.ToString("yyyy-MM-dd")</td>
+                <td>@item.CustomerName</td>
+                <td>@item.EmployeeName</td>
+                <td>@item.ProductCount</td>
+                <td>@item.TotalAmount.ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="ExportToExcel" class="btn btn-success">Экспорт в Excel</a>
+    <a asp-action="ExportToPdf" class="btn btn-danger">Экспорт в PDF</a>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary mt-3">Назад к отчётам</a>

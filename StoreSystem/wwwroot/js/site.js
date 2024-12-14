@@ -132,7 +132,28 @@
             return;
         }
 
-        const employeeId = 1; // ID текущего сотрудника (поменяй на реальную логику получения)
+        const employeeId = 1;
+        // Функция для получения текущего пользователя
+        function fetchCurrentUser() {
+            try {
+                const response =  fetch('/Account/GetCurrentUser');
+                if (!response.ok) {
+                    throw new Error( response.text());
+                }
+
+                const data =  response.json();
+                employeeId = data.EmployeeId; // Сохраняем EmployeeId текущего пользователя
+                console.log(`Текущий сотрудник: ${data.Username} (ID: ${employeeId}, Роль: ${data.Role})`);
+            } catch (error) {
+                console.error("Ошибка при получении данных о текущем пользователе:", error.message);
+                alert("Не удалось получить данные о текущем пользователе. Попробуйте обновить страницу.");
+            }
+        }
+
+        // Вызов функции получения текущего пользователя при загрузке
+        fetchCurrentUser();
+
+        // ID текущего сотрудника (поменяй на реальную логику получения)
         const orderDetails = Object.entries(cartItems).map(([id, item]) => ({
             ProductId: parseInt(id, 10),
             Quantity: item.quantity,

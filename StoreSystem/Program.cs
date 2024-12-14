@@ -22,6 +22,7 @@ namespace StoreSystem
                                   options.LoginPath = "/Account/Login"; // Путь к странице входа
                                   options.AccessDeniedPath = "/Account/AccessDenied"; // Путь к странице отказа в доступе
                              });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -56,6 +57,7 @@ namespace StoreSystem
 
                 return Results.Ok(new { orderId = order.Id, message = "Заказ успешно создан!" });
             });
+            
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -67,6 +69,7 @@ namespace StoreSystem
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
             app.Run();
         }

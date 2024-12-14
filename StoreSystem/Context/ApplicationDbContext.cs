@@ -9,7 +9,7 @@ namespace testproject.Models
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
-
+       
         public DbSet<Customer> Customers { get; set; } = null!;
         public DbSet<Employee> Employees { get; set; } = null!;
         public DbSet<Post> Posts { get; set; } = null!;
@@ -96,6 +96,11 @@ namespace testproject.Models
                  .WithMany(c => c.Products) // Убедитесь, что в модели `Category` есть коллекция `Products`
                  .HasForeignKey(p => p.CategoryId)
                  .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Order>()
+                .Property(o => o.OrderDate)
+                .HasConversion(
+                     v => v.ToUniversalTime(), // Преобразование в UTC перед сохранением
+                     v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
         }
     }
 }

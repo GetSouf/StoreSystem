@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using StoreSystem.Models;
-using testproject.Models;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using StoreSystem.Models;
+using System.Security.Claims;
+using testproject.Models;
 
 public class AccountController : Controller
 {
@@ -37,7 +37,8 @@ public class AccountController : Controller
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, user.Username),
-            new Claim(ClaimTypes.Role, user.Post.Name)
+            new Claim(ClaimTypes.Role, user.Post.Name),
+            new Claim("EmployeeId", user.EmployeeId.ToString()) // Добавляем EmployeeId в claims
         };
 
         var claimsIdentity = new ClaimsIdentity(claims, "CookieAuth");
@@ -58,8 +59,6 @@ public class AccountController : Controller
     {
         return View();
     }
-
-
 
     public IActionResult Register()
     {
@@ -111,5 +110,41 @@ public class AccountController : Controller
         return RedirectToAction("Login");
     }
 
+    // Новый метод для получения текущего пользователя
+    [HttpGet]
+    [Authorize] // Убедитесь, что только авторизованные пользователи могут обращаться к этому методу
+    public IActionResult GetCurrentUser()
+    {
+        var user = HttpContext.User;
+        if (user.Identity == null || !user.Identity.IsAuthenticated)
+        {
+            return Unauthorized(new { message = "Пользователь не авторизован" });
+        }
 
+        // Извлекаем EmployeeId из claims
+        var employeeIdClaim = user.Claims.FirstOrDefault(c => c.Type == "EmployeeId");
+        if (employeeIdClaim == null)
+        {
+            return BadRequest(new { message = "EmployeeId не найден" });
+        }
+
+        var employeeId = int.Parse(employeeIdClaim.Value);
+
+        // Получаем пользователя и его данные из базы
+        var currentUser = _context.Users
+            .Include(u => u.Post)
+            .FirstOrDefault(u => u.EmployeeId == employeeId);
+
+        if (currentUser == null)
+        {
+            return NotFound(new { message = "Пользователь не найден" });
+        }
+
+        return Ok(new
+        {
+            Username = currentUser.Username,
+            EmployeeId = currentUser.EmployeeId,
+            Role = currentUser.Post.Name
+        });
+    }
 }
