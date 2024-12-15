@@ -237,6 +237,7 @@ namespace StoreSystem.Controllers
             ViewData["PriceSortParam"] = sortOrder == "price" ? "price_desc" : "price";
             ViewData["QuantitySortParam"] = sortOrder == "quantity" ? "quantity_desc" : "quantity";
             ViewData["SalesCountSortParam"] = sortOrder == "sales_count" ? "sales_count_desc" : "sales_count";
+            ViewData["AverageRatingSortParam"] = sortOrder == "rating" ? "rating_desc" : "rating"; // Новый параметр
 
             // Запрос с использованием навигационных свойств
             var productSalesQuery = _context.OrderDetails
@@ -245,14 +246,20 @@ namespace StoreSystem.Controllers
                 .Include(od => od.Product)
                     .ThenInclude(p => p.ProductSuppliers)
                         .ThenInclude(ps => ps.Supplier)
+                .Include(od => od.Product)
+                    .ThenInclude(p => p.Ratings)
                 .GroupBy(od => new
                 {
                     ProductName = od.Product.Name,
                     CategoryName = od.Product.Category.Name,
                     SupplierName = od.Product.ProductSuppliers
                         .Select(ps => ps.Supplier.Name).FirstOrDefault(),
-                    od.Price
+                    od.Price,
+                    AverageRating = od.Product.Ratings.Any()
+                        ? od.Product.Ratings.Average(r => r.RatingValue)
+                        : 0.0
                 })
+                .AsEnumerable()
                 .Select(g => new ProductSalesReportViewModel
                 {
                     ProductName = g.Key.ProductName,
@@ -260,7 +267,8 @@ namespace StoreSystem.Controllers
                     SupplierName = g.Key.SupplierName ?? "Не указан",
                     Price = g.Key.Price,
                     QuantitySold = g.Sum(od => od.Quantity),
-                    SalesCount = g.Count()
+                    SalesCount = g.Count(),
+                    AverageRating = Math.Round(g.Key.AverageRating, 2)
                 });
 
             // Сортировка
@@ -277,12 +285,15 @@ namespace StoreSystem.Controllers
                 "quantity_desc" => productSalesQuery.OrderByDescending(p => p.QuantitySold),
                 "sales_count" => productSalesQuery.OrderBy(p => p.SalesCount),
                 "sales_count_desc" => productSalesQuery.OrderByDescending(p => p.SalesCount),
+                "rating" => productSalesQuery.OrderBy(p => p.AverageRating), // Сортировка по средней оценке
+                "rating_desc" => productSalesQuery.OrderByDescending(p => p.AverageRating), // Обратная сортировка
                 _ => productSalesQuery.OrderBy(p => p.ProductName),
             };
 
-            var productSales = await productSalesQuery.ToListAsync();
+            var productSales = productSalesQuery.ToList();
             return View(productSales);
         }
+
 
 
 

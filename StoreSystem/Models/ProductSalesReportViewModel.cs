@@ -8,5 +8,6 @@
         public decimal Price { get; set; }
         public int QuantitySold { get; set; } // Общее количество проданных единиц товара
         public int SalesCount { get; set; }   // Количество продаж (заказов)
+        public double AverageRating { get; set; } // Средняя оценка покупателей
     }
 }

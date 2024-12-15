@@ -1,31 +1,34 @@
 ﻿@model IEnumerable<StoreSystem.Models.ProductSalesReportViewModel>
 
 @{
-    ViewData["Title"] = "Отчёт по продажам товаров";
+    ViewData["Title"] = "Product Sales Report";
 }
 
-<h2>Отчёт по продажам товаров</h2>
+<h2>Product Sales Report</h2>
 
 <table class="table table-striped">
     <thead>
         <tr>
             <th>
-                <a asp-action="ProductSalesReport" asp-route-sortOrder="@ViewData["ProductSortParam"]">Товар</a>
+                <a asp-action="ProductSalesReport" asp-route-sortOrder="@ViewData["ProductSortParam"]">Product</a>
             </th>
             <th>
-                <a asp-action="ProductSalesReport" asp-route-sortOrder="@ViewData["CategorySortParam"]">Категория</a>
+                <a asp-action="ProductSalesReport" asp-route-sortOrder="@ViewData["CategorySortParam"]">Category</a>
             </th>
             <th>
-                <a asp-action="ProductSalesReport" asp-route-sortOrder="@ViewData["SupplierSortParam"]">Поставщик</a>
+                <a asp-action="ProductSalesReport" asp-route-sortOrder="@ViewData["SupplierSortParam"]">Supplier</a>
             </th>
             <th>
-                <a asp-action="ProductSalesReport" asp-route-sortOrder="@ViewData["PriceSortParam"]">Цена</a>
+                <a asp-action="ProductSalesReport" asp-route-sortOrder="@ViewData["PriceSortParam"]">Price</a>
             </th>
             <th>
-                <a asp-action="ProductSalesReport" asp-route-sortOrder="@ViewData["QuantitySortParam"]">Количество продано</a>
+                <a asp-action="ProductSalesReport" asp-route-sortOrder="@ViewData["QuantitySortParam"]">Quantity Sold</a>
             </th>
             <th>
-                <a asp-action="ProductSalesReport" asp-route-sortOrder="@ViewData["SalesCountSortParam"]">Количество продаж</a>
+                <a asp-action="ProductSalesReport" asp-route-sortOrder="@ViewData["SalesCountSortParam"]">Sales Count</a>
+            </th>
+            <th>
+                <a asp-action="ProductSalesReport" asp-route-sortOrder="@ViewData["AverageRatingSortParam"]">Average Rating</a>
             </th>
         </tr>
     </thead>
@@ -39,6 +42,7 @@
                 <td>@item.Price.ToString("C")</td>
                 <td>@item.QuantitySold</td>
                 <td>@item.SalesCount</td>
+                <td>@item.AverageRating</td>
             </tr>
         }
     </tbody>
