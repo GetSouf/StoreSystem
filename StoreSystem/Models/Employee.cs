@@ -9,28 +9,28 @@ namespace StoreSystem.Models
     public class Employee
     {
         [Key]
-        public int Id { get; set; } // Уникальный идентификатор сотрудника
+        public int Id { get; set; }
 
         [Required]
         [MaxLength(50)]
-        public string FirstName { get; set; } = null!; // Имя
+        public string FirstName { get; set; }
 
         [Required]
         [MaxLength(50)]
-        public string LastName { get; set; } = null!; // Фамилия
+        public string LastName { get; set; }
 
-        [Required]
-        public int PostId { get; set; } // Связь с должностью
+        public int PostId { get; set; }
 
         [ForeignKey("PostId")]
-        public Post Post { get; set; } = null!; // Навигационное свойство
+        public Post Post { get; set; }
 
         [Required]
-        public DateTime HireDate { get; set; }= DateTime.Now;
+        public DateTime HireDate { get; set; } = DateTime.Now;
 
-        [Required]
-        [Range(0, double.MaxValue, ErrorMessage = "Зарплата должна быть больше 0")]
-        public decimal Salary { get; set; } // Зарплата
+        [Range(0, double.MaxValue)]
+        public decimal Salary { get; set; }
 
+        [Range(0, double.MaxValue)]
+        public decimal Bonus { get; set; } = 0; // Новое поле для бонусов
     }
 }

@@ -123,43 +123,45 @@
                 });
             });
     });
+    async function fetchCurrentUser() {
+        try {
+            const response = await fetch('/Account/GetCurrentUser');
+            if (!response.ok) {
+                throw new Error(await response.text());
+            }
 
-    // Создание заказа
-    createOrderBtn.addEventListener('click', () => {
+            const data = await response.json();
+            console.log("Ответ от сервера:", data);
+            return data.employeeId; // Возвращаем ID сотрудника
+        } catch (error) {
+            console.error("Ошибка при получении данных о текущем пользователе:", error.message);
+            alert("Не удалось получить данные о текущем пользователе. Попробуйте обновить страницу.");
+            return null;
+        }
+    }
+    
+    createOrderBtn.addEventListener('click', async () => { // Добавляем async здесь
         const customerId = customerSelect.value;
         if (!customerId) {
             alert('Пожалуйста, выберите покупателя.');
             return;
         }
 
-        const employeeId = 1;
-        // Функция для получения текущего пользователя
-        function fetchCurrentUser() {
-            try {
-                const response =  fetch('/Account/GetCurrentUser');
-                if (!response.ok) {
-                    throw new Error( response.text());
-                }
-
-                const data =  response.json();
-                employeeId = data.EmployeeId; // Сохраняем EmployeeId текущего пользователя
-                console.log(`Текущий сотрудник: ${data.Username} (ID: ${employeeId}, Роль: ${data.Role})`);
-            } catch (error) {
-                console.error("Ошибка при получении данных о текущем пользователе:", error.message);
-                alert("Не удалось получить данные о текущем пользователе. Попробуйте обновить страницу.");
-            }
+        // Получаем ID сотрудника асинхронно
+        const employeeId = await fetchCurrentUser();
+        if (!employeeId) {
+            alert("Не удалось получить ID сотрудника. Попробуйте позже.");
+            return;
         }
 
-        // Вызов функции получения текущего пользователя при загрузке
-        fetchCurrentUser();
-
-        // ID текущего сотрудника (поменяй на реальную логику получения)
+        // Формируем детали заказа
         const orderDetails = Object.entries(cartItems).map(([id, item]) => ({
             ProductId: parseInt(id, 10),
             Quantity: item.quantity,
             Price: item.price
         }));
 
+        // Отправляем заказ на сервер
         fetch('/api/CreateOrder', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -180,6 +182,10 @@
                 } else {
                     alert('Ошибка при создании заказа.');
                 }
+            })
+            .catch(error => {
+                console.error("Ошибка при создании заказа:", error.message);
+                alert("Произошла ошибка при создании заказа.");
             });
     });
 });

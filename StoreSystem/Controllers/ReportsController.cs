@@ -167,7 +167,6 @@ namespace StoreSystem.Controllers
         }
         public async Task<IActionResult> SalesReport(string sortOrder, DateTime? startDate, DateTime? endDate)
         {
-            // Параметры для сортировки
             ViewData["OrderIdSortParam"] = string.IsNullOrEmpty(sortOrder) ? "orderid_desc" : "";
             ViewData["DateSortParam"] = sortOrder == "date" ? "date_desc" : "date";
             ViewData["CustomerSortParam"] = sortOrder == "customer" ? "customer_desc" : "customer";
@@ -175,34 +174,33 @@ namespace StoreSystem.Controllers
             ViewData["TotalAmountSortParam"] = sortOrder == "total" ? "total_desc" : "total";
             ViewData["ProductCountSortParam"] = sortOrder == "product_count" ? "product_count_desc" : "product_count";
 
-            // Запрос заказов с включением зависимостей
             var salesQuery = _context.Orders
                 .Include(o => o.Customer)
                 .Include(o => o.Employee)
                 .Include(o => o.OrderDetails)
+                    .ThenInclude(od => od.Product)
                 .AsQueryable();
 
-            // Фильтрация по диапазону дат
             if (startDate.HasValue)
-            {
                 salesQuery = salesQuery.Where(o => o.OrderDate >= startDate.Value);
-            }
-
             if (endDate.HasValue)
-            {
                 salesQuery = salesQuery.Where(o => o.OrderDate <= endDate.Value);
-            }
 
-            // Проекция данных в ViewModel
             var salesReport = await salesQuery
                 .Select(o => new SalesReportViewModel
                 {
                     OrderId = o.Id,
                     OrderDate = o.OrderDate,
-                    CustomerName = o.Customer.FirstName,
-                    EmployeeName = o.Employee.FirstName,
+                    CustomerName = o.Customer.FirstName + " " + o.Customer.LastName,
+                    EmployeeName = o.Employee.FirstName + " " + o.Employee.LastName,
                     ProductCount = o.OrderDetails.Sum(od => od.Quantity),
-                    TotalAmount = o.TotalAmount
+                    TotalAmount = o.TotalAmount,
+                    OrderDetails = o.OrderDetails.Select(od => new OrderDetailViewModel
+                    {
+                        ProductName = od.Product.Name,
+                        Quantity = od.Quantity,
+                        Price = od.Price
+                    }).ToList()
                 })
                 .ToListAsync();
 

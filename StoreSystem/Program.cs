@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using StoreSystem.Interfaces;
 using StoreSystem.Models;
+using StoreSystem.Realizations;
 using System;
 using testproject.Models;
 
@@ -22,7 +24,8 @@ namespace StoreSystem
                                   options.LoginPath = "/Account/Login"; // Путь к странице входа
                                   options.AccessDeniedPath = "/Account/AccessDenied"; // Путь к странице отказа в доступе
                              });
-
+            builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<IBonusService, BonusService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

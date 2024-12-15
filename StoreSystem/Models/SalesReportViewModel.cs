@@ -4,9 +4,10 @@
     {
         public int OrderId { get; set; }
         public DateTime OrderDate { get; set; }
-        public string CustomerName { get; set; } = string.Empty;
-        public string EmployeeName { get; set; } = string.Empty;
+        public string CustomerName { get; set; }
+        public string EmployeeName { get; set; }
         public int ProductCount { get; set; }
         public decimal TotalAmount { get; set; }
+        public List<OrderDetailViewModel> OrderDetails { get; set; }
     }
 }

@@ -27,6 +27,8 @@ namespace StoreSystem.Models
 
         [MaxLength(500)]
         public string? Description { get; set; } // Описание товара
+        public double BonusPercentage { get; set; }
+
 
         public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>(); // Связь с деталями заказов
         public ICollection<ProductSupplier> ProductSuppliers { get; set; } = new List<ProductSupplier>(); // Связь с поставщиками

@@ -65,7 +65,8 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
+            <!-- Строка заказа -->
+            <tr class="order-row" data-toggle="details-@item.OrderId">
                 <td>@item.OrderId</td>
                 <td>@item.OrderDate.ToString("yyyy-MM-dd")</td>
                 <td>@item.CustomerName</td>
@@ -73,9 +74,37 @@
                 <td>@item.ProductCount</td>
                 <td>@item.TotalAmount.ToString("C")</td>
             </tr>
+            <!-- Детальная строка (по умолчанию скрыта) -->
+            <tr class="order-details details-@item.OrderId" style="display: none;">
+                <td colspan="6">
+                    <strong>Детали заказа № @item.OrderId:</strong>
+                    <ul>
+                        @foreach (var detail in item.OrderDetails)
+                        {
+                            <li>@detail.ProductName - @detail.Quantity шт. по @detail.Price.ToString("C")</li>
+                        }
+                    </ul>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
+
+<!-- Скрипт для раскрытия деталей -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const rows = document.querySelectorAll(".order-row");
+        rows.forEach(row => {
+            row.addEventListener("click", function () {
+                const targetClass = this.dataset.toggle;
+                const detailsRow = document.querySelector(`.${targetClass}`);
+                if (detailsRow) {
+                    detailsRow.style.display = detailsRow.style.display === "none" ? "table-row" : "none";
+                }
+            });
+        });
+    });
+</script>
 
 <div>
     <a asp-action="ExportToExcel" class="btn btn-success">Экспорт в Excel</a>
