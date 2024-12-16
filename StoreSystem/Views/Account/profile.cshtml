@@ -1,0 +1,51 @@
+﻿@model StoreSystem.ViewModels.EmployeeProfileViewModel
+
+@{
+    ViewData["Title"] = "Профиль сотрудника";
+}
+
+<h1>Профиль сотрудника</h1>
+
+<div>
+    <h2>Основная информация</h2>
+    <ul>
+        <li><strong>ФИО:</strong> @Model.FullName</li>
+        <li><strong>Должность:</strong> @Model.Post</li>
+        <li><strong>Дата найма:</strong> @Model.HireDate.ToShortDateString()</li>
+        <li><strong>Оклад:</strong> @Model.Salary.ToString("C")</li>
+        <li><strong>Бонус:</strong> @Model.Bonus.ToString("C")</li>
+    </ul>
+</div>
+
+<hr />
+
+<div>
+    <h2>История продаж</h2>
+
+    @if (Model.SalesHistory.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Дата заказа</th>
+                    <th>Общая сумма</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var sale in Model.SalesHistory)
+                {
+                    <tr>
+                        <td>@sale.OrderId</td>
+                        <td>@sale.OrderDate.ToShortDateString()</td>
+                        <td>@sale.TotalAmount.ToString("C")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>История продаж отсутствует.</p>
+    }
+</div>

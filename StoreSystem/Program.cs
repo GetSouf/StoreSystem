@@ -26,7 +26,9 @@ namespace StoreSystem
                              });
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IBonusService, BonusService>();
+
             var app = builder.Build();
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -35,6 +37,9 @@ namespace StoreSystem
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.MapControllerRoute(
+                 name: "default",
+                 pattern: "{controller=Account}/{action=Profile}/{id?}");
             app.MapPost("/api/createOrder", async (HttpContext context, ApplicationDbContext db) =>
             {
                 var requestBody = await context.Request.ReadFromJsonAsync<OrderRequest>();

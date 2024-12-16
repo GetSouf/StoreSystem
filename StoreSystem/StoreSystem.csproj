@@ -25,8 +25,4 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite" Version="9.0.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\ReportsModels\" />
-  </ItemGroup>
-
 </Project>

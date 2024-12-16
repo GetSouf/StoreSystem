@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using StoreSystem.Models;
 using System.Security.Claims;
 using testproject.Models;
+using StoreSystem.ViewModels;
 
 public class AccountController : Controller
 {
@@ -39,7 +40,7 @@ public class AccountController : Controller
         {
             new Claim(ClaimTypes.Name, user.Username),
             new Claim(ClaimTypes.Role, user.Post.Name),
-            new Claim("EmployeeId", user.EmployeeId.ToString()) // Добавляем EmployeeId в claims
+            new Claim("EmployeeId", user.EmployeeId.ToString())
         };
 
         var claimsIdentity = new ClaimsIdentity(claims, "CookieAuth");
@@ -63,7 +64,7 @@ public class AccountController : Controller
 
     public IActionResult Register()
     {
-        // Получаем список сотрудников для выпадающего списка
+ 
         ViewBag.EmployeeId = new SelectList(_context.Employees.Include(e => e.Post), "Id", "FirstName");
         return View();
     }
@@ -79,7 +80,7 @@ public class AccountController : Controller
             return View();
         }
 
-        // Проверяем, существует ли пользователь
+       
         if (_context.Users.Any(u => u.Username == username))
         {
             ModelState.AddModelError("", "Пользователь с таким логином уже существует.");
@@ -87,7 +88,7 @@ public class AccountController : Controller
             return View();
         }
 
-        // Извлекаем сотрудника и его должность
+      
         var employee = await _context.Employees.Include(e => e.Post).FirstOrDefaultAsync(e => e.Id == employeeId);
         if (employee == null)
         {
@@ -96,13 +97,13 @@ public class AccountController : Controller
             return View();
         }
 
-        // Добавляем нового пользователя
+      
         var user = new User
         {
             Username = username,
-            PasswordHash = password, // Здесь можно добавить хэширование
+            PasswordHash = password, 
             EmployeeId = employee.Id,
-            PostId = employee.PostId // Устанавливаем должность, связанную с сотрудником
+            PostId = employee.PostId
         };
 
         _context.Users.Add(user);
@@ -111,9 +112,8 @@ public class AccountController : Controller
         return RedirectToAction("Login");
     }
 
-    // Новый метод для получения текущего пользователя
     [HttpGet]
-    [Authorize] // Убедитесь, что только авторизованные пользователи могут обращаться к этому методу
+    [Authorize] 
     public IActionResult GetCurrentUser()
     {
         var user = HttpContext.User;
@@ -131,7 +131,7 @@ public class AccountController : Controller
 
         var employeeId = int.Parse(employeeIdClaim.Value);
 
-        // Получаем пользователя и его данные из базы
+  
         var currentUser = _context.Users
             .Include(u => u.Post)
             .FirstOrDefault(u => u.EmployeeId == employeeId);
@@ -147,5 +147,39 @@ public class AccountController : Controller
             EmployeeId = currentUser.EmployeeId,
             Role = currentUser.Post.Name
         });
+
+
     }
+    [HttpGet("account/profile/{id}")]
+    public IActionResult Profile(int id)
+    {
+        var employee = _context.Employees
+        .Include(e => e.Post)
+        .Include(e => e.Orders)
+        .FirstOrDefault(e => e.Id == id);
+
+        if (employee == null)
+        {
+            return NotFound("Сотрудник не найден.");
+        }
+
+        var viewModel = new StoreSystem.ViewModels.EmployeeProfileViewModel
+        {
+            FullName = $"{employee.FirstName} {employee.LastName}",
+            Post = employee.Post.Name,
+            HireDate = employee.HireDate,
+            Salary = employee.Salary,
+            Bonus = employee.Bonus,
+            SalesHistory = employee.Orders.Select(o => new OrderViewModel
+            {
+                OrderId = o.Id,
+                OrderDate = o.OrderDate,
+                TotalAmount = o.TotalAmount
+            }).ToList()
+        };
+
+        // Возвращаем View с моделью
+        return View(viewModel);
+    }
+
 }

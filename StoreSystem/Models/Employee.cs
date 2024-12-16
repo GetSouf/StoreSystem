@@ -31,6 +31,15 @@ namespace StoreSystem.Models
         public decimal Salary { get; set; }
 
         [Range(0, double.MaxValue)]
-        public decimal Bonus { get; set; } = 0; // Новое поле для бонусов
+        public decimal Bonus { get; set; } = 0;
+        public string? ProfilePictureUrl { get; set; }
+
+        public ICollection<Order> Orders { get; set; } = new List<Order>(); 
+
+
+
+
+
+
     }
 }

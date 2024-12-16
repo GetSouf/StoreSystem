@@ -50,10 +50,14 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Account" asp-action="Profile" asp-route-id="@User.FindFirst("EmployeeId")?.Value">Profile</a>
+                                </li>
 
                             </ul>
                         </ul>
-
+                               
+        
                     }
                     else
                     {
