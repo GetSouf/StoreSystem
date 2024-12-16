@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StoreSystem.Models;
 using System.Diagnostics;
 
 namespace StoreSystem.Controllers
 {
+  
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

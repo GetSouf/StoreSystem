@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StoreSystem.Interfaces;
 using StoreSystem.Models;
 using StoreSystem.Realizations;
@@ -6,6 +7,7 @@ using testproject.Models;
 
 namespace StoreSystem.Controllers
 {
+    [Authorize]
     public class SaleController : Controller
     {
         private readonly ApplicationDbContext _context;

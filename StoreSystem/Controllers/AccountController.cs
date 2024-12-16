@@ -9,6 +9,7 @@ using testproject.Models;
 
 public class AccountController : Controller
 {
+
     private readonly ApplicationDbContext _context;
 
     public AccountController(ApplicationDbContext context)

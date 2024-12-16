@@ -11,7 +11,7 @@ using testproject.Models;
 
 namespace StoreSystem.Controllers
 {
-
+    [Authorize(Roles = "Директор,Заместитель директора, Старший продавец")]
     public class SuppliersController : Controller
     {
         private readonly ApplicationDbContext _context;

@@ -8,9 +8,11 @@ using OfficeOpenXml;
 using System.IO;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using Microsoft.AspNetCore.Authorization;
 namespace StoreSystem.Controllers
 
 {
+    [Authorize(Roles = "Директор,Заместитель директора, Старший продавец")]
     public class ReportsController : Controller
     {
         private readonly ApplicationDbContext _context;
