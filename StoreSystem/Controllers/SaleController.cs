@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using StoreSystem.Interfaces;
 using StoreSystem.Models;
 using StoreSystem.Realizations;
@@ -97,7 +98,8 @@ namespace StoreSystem.Controllers
                 EmployeeId = employeeId,
                 OrderDate = DateTime.UtcNow,
                 TotalAmount = totalAmount,
-                OrderDetails = orderDetails
+                OrderDetails = orderDetails,
+                Status = "Created"
             };
 
             _context.Orders.Add(order);
@@ -144,6 +146,7 @@ namespace StoreSystem.Controllers
             ViewBag.Bonus = bonus;
             return View(product);
         }
+        
 
 
 

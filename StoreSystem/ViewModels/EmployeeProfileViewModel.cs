@@ -8,7 +8,8 @@
         public decimal Salary { get; set; }
         public decimal Bonus { get; set; }
 
-        // История продаж
+
         public List<OrderViewModel> SalesHistory { get; set; } = new();
+        public string ProfilePictureUrl { get; internal set; }
     }
 }

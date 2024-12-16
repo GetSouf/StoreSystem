@@ -174,5 +174,30 @@ namespace StoreSystem.Controllers
         {
             return _context.Orders.Any(e => e.Id == id);
         }
+        [HttpPost]
+        public IActionResult ChangeOrderStatus(int orderId, string newStatus)
+        {
+            var order = _context.Orders.FirstOrDefault(o => o.Id == orderId);
+
+            if (order == null)
+                return NotFound("Заказ не найден.");
+
+            string oldStatus = order.Status;
+
+            // Проверка допустимости изменения статуса
+            if (newStatus == "Paid" && oldStatus != "Created")
+                return BadRequest("Только созданный заказ можно оплатить.");
+            if (newStatus == "Returned" && oldStatus != "Paid")
+                return BadRequest("Только оплаченный заказ можно вернуть.");
+
+            // Обновление статуса
+            order.Status = newStatus;
+
+            // Сохранение изменений
+            _context.SaveChanges();
+
+            TempData["SuccessMessage"] = $"Статус заказа #{orderId} изменён на '{newStatus}'.";
+            return RedirectToAction("Index");
+        }
     }
 }

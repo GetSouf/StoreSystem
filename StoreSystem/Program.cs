@@ -26,7 +26,7 @@ namespace StoreSystem
                              });
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IBonusService, BonusService>();
-
+            builder.Services.AddHttpContextAccessor();
             var app = builder.Build();
 
 

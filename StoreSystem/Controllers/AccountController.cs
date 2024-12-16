@@ -170,6 +170,7 @@ public class AccountController : Controller
             HireDate = employee.HireDate,
             Salary = employee.Salary,
             Bonus = employee.Bonus,
+            ProfilePictureUrl = employee.ProfilePictureUrl ?? "/images/default-profile.jpg",
             SalesHistory = employee.Orders.Select(o => new OrderViewModel
             {
                 OrderId = o.Id,
@@ -178,8 +179,68 @@ public class AccountController : Controller
             }).ToList()
         };
 
-        // Возвращаем View с моделью
+
         return View(viewModel);
     }
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> UploadProfilePicture(IFormFile profilePicture)
+    {
+        if (profilePicture == null || profilePicture.Length == 0)
+        {
+            ModelState.AddModelError("", "Файл не выбран.");
+            return RedirectToAction("Profile", new { id = User.FindFirst("EmployeeId")?.Value });
+        }
+
+        var fileName = $"{Guid.NewGuid()}_{profilePicture.FileName}";
+        var filePath = Path.Combine("wwwroot/images/", fileName);
+
+        // Сохранение файла
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            await profilePicture.CopyToAsync(stream);
+        }
+
+        // Обновление базы данных
+        var userId = int.Parse(User.FindFirst("EmployeeId")?.Value!);
+        var employee = _context.Employees.FirstOrDefault(e => e.Id == userId);
+
+        if (employee != null)
+        {
+            employee.ProfilePictureUrl = $"/images/{fileName}";
+            _context.SaveChanges();
+        }
+
+        return RedirectToAction("Profile", new { id = userId });
+    }
+    [HttpPost]
+    [Authorize]
+    public IActionResult ChangePassword(string CurrentPassword, string NewPassword, string ConfirmPassword)
+    {
+        if (NewPassword != ConfirmPassword)
+        {
+            ModelState.AddModelError("", "Пароли не совпадают.");
+            return View("Profile");
+        }
+
+        var userId = int.Parse(User.FindFirst("EmployeeId")?.Value!);
+        var user = _context.Users.FirstOrDefault(u => u.EmployeeId == userId);
+
+        if (user == null)
+            return NotFound("Пользователь не найден.");
+
+        if ((CurrentPassword != user.PasswordHash))
+        {
+            ModelState.AddModelError("", "Неправильный текущий пароль.");
+            return View("Profile");
+        }
+
+        user.PasswordHash = NewPassword;
+        _context.SaveChanges();
+
+        TempData["Message"] = "Пароль успешно изменён!";
+        return RedirectToAction("Profile", new { id = userId });
+    }
+
 
 }

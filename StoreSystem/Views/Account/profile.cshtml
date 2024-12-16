@@ -4,24 +4,36 @@
     ViewData["Title"] = "Профиль сотрудника";
 }
 
-<h1>Профиль сотрудника</h1>
+<h1 class="text-center mb-4">Профиль сотрудника</h1>
 
-<div>
-    <h2>Основная информация</h2>
-    <ul>
-        <li><strong>ФИО:</strong> @Model.FullName</li>
-        <li><strong>Должность:</strong> @Model.Post</li>
-        <li><strong>Дата найма:</strong> @Model.HireDate.ToShortDateString()</li>
-        <li><strong>Оклад:</strong> @Model.Salary.ToString("C")</li>
-        <li><strong>Бонус:</strong> @Model.Bonus.ToString("C")</li>
-    </ul>
+
+<div class="container">
+    <div class="row align-items-center profile-section">
+
+        <div class="col-md-4 text-center">
+            <img src="@Model.ProfilePictureUrl" alt="Profile Picture" class="profile-img rounded-circle" />
+        </div>
+
+
+        <div class="col-md-8 profile-details">
+            <h2 class="mb-3">@Model.FullName</h2>
+            <p class="lead"><strong>Должность:</strong> @Model.Post</p>
+            <p class="lead"><strong>Дата найма:</strong> @Model.HireDate.ToString("dd.MM.yyyy")</p>
+            <p class="lead"><strong>Зарплата:</strong> @Model.Salary.ToString("C")</p>
+            <p class="lead"><strong>Бонус:</strong> @Model.Bonus.ToString("C")</p>
+        </div>
+    </div>
 </div>
 
 <hr />
 
-<div>
-    <h2>История продаж</h2>
 
+<h3>
+    <a class="text-primary" data-bs-toggle="collapse" href="#salesHistory" role="button" aria-expanded="false" aria-controls="salesHistory">
+        История продаж
+    </a>
+</h3>
+<div class="collapse" id="salesHistory">
     @if (Model.SalesHistory.Any())
     {
         <table class="table table-striped">
@@ -48,4 +60,44 @@
     {
         <p>История продаж отсутствует.</p>
     }
+</div>
+
+
+<h3>
+    <a class="text-primary" data-bs-toggle="collapse" href="#uploadPhoto" role="button" aria-expanded="false" aria-controls="uploadPhoto">
+        Загрузить фото профиля
+    </a>
+</h3>
+<div class="collapse" id="uploadPhoto">
+    <form method="post" asp-action="UploadProfilePicture" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="profilePicture">Выберите файл</label>
+            <input type="file" class="form-control" id="profilePicture" name="profilePicture" required />
+        </div>
+        <button type="submit" class="btn btn-success mt-2">Загрузить</button>
+    </form>
+</div>
+
+
+<h3>
+    <a class="text-primary" data-bs-toggle="collapse" href="#changePassword" role="button" aria-expanded="false" aria-controls="changePassword">
+        Сменить пароль
+    </a>
+</h3>
+<div class="collapse" id="changePassword">
+    <form method="post" asp-controller="Account" asp-action="ChangePassword">
+        <div class="form-group">
+            <label for="currentPassword">Текущий пароль</label>
+            <input type="password" class="form-control" id="currentPassword" name="CurrentPassword" required>
+        </div>
+        <div class="form-group">
+            <label for="newPassword">Новый пароль</label>
+            <input type="password" class="form-control" id="newPassword" name="NewPassword" required>
+        </div>
+        <div class="form-group">
+            <label for="confirmPassword">Подтвердите пароль</label>
+            <input type="password" class="form-control" id="confirmPassword" name="ConfirmPassword" required>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Сменить пароль</button>
+    </form>
 </div>

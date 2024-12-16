@@ -34,7 +34,6 @@
 
         totalPriceElement.textContent = totalPrice.toFixed(2);
 
-        // Обработчики кнопок "+" и "-"
         document.querySelectorAll('.decrease').forEach(button => {
             button.addEventListener('click', () => {
                 const id = button.dataset.id;
@@ -188,4 +187,23 @@
                 alert("Произошла ошибка при создании заказа.");
             });
     });
+    function changeOrderStatus(orderId, newStatus) {
+        fetch(`/Sale/ChangeOrderStatus?orderId=${orderId}&newStatus=${newStatus}`, {
+            method: 'POST'
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(text); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(data.message);
+                location.reload(); 
+            })
+            .catch(error => {
+                console.error("Ошибка изменения статуса:", error.message);
+                alert("Произошла ошибка при изменении статуса.");
+            });
+    }
 });

@@ -7,28 +7,29 @@ namespace StoreSystem.Models
     public class Order
     {
         [Key]
-        public int Id { get; set; } // Уникальный идентификатор заказа
+        public int Id { get; set; } 
 
         [Required]
-        public int CustomerId { get; set; } // Связь с клиентом
+        public int CustomerId { get; set; } 
 
         [ForeignKey("CustomerId")]
-        public Customer Customer { get; set; } = null!; // Навигационное свойство
+        public Customer Customer { get; set; } = null!; 
 
         [Required]
-        public int EmployeeId { get; set; } // Связь с сотрудником
+        public int EmployeeId { get; set; }
 
         [ForeignKey("EmployeeId")]
-        public Employee Employee { get; set; } = null!; // Навигационное свойство
+        public Employee Employee { get; set; } = null!; 
 
         [Required]
-        public DateTime OrderDate { get; set; }  // Дата заказа по умолчанию
+        public DateTime OrderDate { get; set; }  
 
         [Required]
         [Range(0.01, double.MaxValue)]
-        public decimal TotalAmount { get; set; } // Общая сумма заказа
+        public decimal TotalAmount { get; set; } 
 
-        public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>(); // Детали заказа
+        public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>(); 
+        public string Status { get; set; }
     }
 
 }
