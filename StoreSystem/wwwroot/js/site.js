@@ -5,9 +5,42 @@
     const totalPriceElement = document.getElementById("total-price");
     const createOrderBtn = document.getElementById("create-order-btn");
     const customerSelect = document.getElementById("customer-select");
+    const steps = document.querySelectorAll(".step");
+    const prevBtn = document.getElementById("prev-step-btn");
+    const nextBtn = document.getElementById("next-step-btn");
+    let currentStep = 0;
 
-    // Хранилище товаров в корзине
+
     const cartItems = {};
+    function updateSteps() {
+        steps.forEach((step, index) => {
+            step.style.display = index === currentStep ? "block" : "none";
+            step.classList.toggle("active", index === currentStep);
+        });
+        prevBtn.style.display = currentStep === 0 ? "none" : "inline-block";
+        nextBtn.style.display = currentStep === steps.length - 1 ? "none" : "inline-block";
+        if (currentStep === 3) {
+            updateOrderSummary();
+            currentStep = 0; 
+            updateSteps();
+
+        }
+    }
+
+    // События кнопок
+    prevBtn.addEventListener("click", () => {
+        if (currentStep > 0) currentStep--;
+        updateSteps();
+    });
+
+    nextBtn.addEventListener("click", () => {
+        if (currentStep < steps.length - 1) currentStep++;
+        updateSteps();
+    });
+
+
+    // Изначально показать первый шаг
+    updateSteps();
 
     // Функция обновления корзины
     function updateCart() {
@@ -160,11 +193,15 @@
             Price: item.price
         }));
 
+
+
         // Отправляем заказ на сервер
         fetch('/api/CreateOrder', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ customerId, employeeId, orderDetails })
+
+
         })
             .then(response => {
                 if (!response.ok) {
@@ -178,6 +215,7 @@
                     Object.keys(cartItems).forEach(id => updateStock(id, cartItems[id].quantity));
                     Object.keys(cartItems).forEach(id => delete cartItems[id]);
                     updateCart();
+                    location.reload(); 
                 } else {
                     alert('Ошибка при создании заказа.');
                 }
@@ -187,6 +225,31 @@
                 alert("Произошла ошибка при создании заказа.");
             });
     });
+    function updateOrderSummary() {
+        const cartSummary = document.getElementById("cart-summary");
+        const cartTotal = document.getElementById("cart-total");
+
+        cartSummary.innerHTML = '';
+        let total = 0;
+
+        if (Object.keys(cartItems).length === 0) {
+            cartSummary.innerHTML = '<p>Ваша корзина пуста.</p>';
+        } else {
+            for (const [id, item] of Object.entries(cartItems)) {
+                const cartRow = document.createElement('div');
+                cartRow.classList.add('cart-summary-item');
+                cartRow.innerHTML = `
+                <span>${item.name}</span>
+                <span>${item.quantity} шт.</span>
+                <span>${(item.price * item.quantity).toFixed(2)} ₽</span> `;
+                cartSummary.appendChild(cartRow);
+
+                total += item.price * item.quantity;
+            }
+        }
+
+        cartTotal.textContent = total.toFixed(2);
+    }
     function changeOrderStatus(orderId, newStatus) {
         fetch(`/Sale/ChangeOrderStatus?orderId=${orderId}&newStatus=${newStatus}`, {
             method: 'POST'

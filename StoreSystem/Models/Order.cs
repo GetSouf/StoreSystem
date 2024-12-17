@@ -28,8 +28,8 @@ namespace StoreSystem.Models
         [Range(0.01, double.MaxValue)]
         public decimal TotalAmount { get; set; } 
 
-        public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>(); 
-        public string Status { get; set; }
+        public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+        public string Status { get; set; } = "Created";
     }
 
 }

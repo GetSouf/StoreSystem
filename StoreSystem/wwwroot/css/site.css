@@ -112,9 +112,11 @@ h3 a {
     transition: opacity 0.5s ease-in-out;
     position: absolute;
     width: 100%;
+    transition: color 0.3s ease;
 }
 
     .step.active {
         opacity: 1;
         position: relative;
+        transition: color 0.3s ease;
     }
