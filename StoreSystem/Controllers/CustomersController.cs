@@ -10,7 +10,7 @@ using testproject.Models;
 
 namespace StoreSystem.Controllers
 {
-    [Authorize(Roles = "Директор,Заместитель директора, Старший продавец")]
+    
     public class CustomersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -21,12 +21,14 @@ namespace StoreSystem.Controllers
         }
 
         // GET: Customers
+        [Authorize(Roles = "Директор,Заместитель директора, Старший продавец")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Customers.ToListAsync());
         }
 
         // GET: Customers/Details/5
+        [Authorize(Roles = "Директор,Заместитель директора, Старший продавец")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -72,6 +74,7 @@ namespace StoreSystem.Controllers
         }
 
         // GET: Customers/Edit/5
+        [Authorize(Roles = "Директор,Заместитель директора, Старший продавец")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -92,6 +95,7 @@ namespace StoreSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Директор,Заместитель директора, Старший продавец")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Email,Phone,Address,RegistrationDate")] Customer customer)
         {
             if (id != customer.Id)
@@ -123,6 +127,7 @@ namespace StoreSystem.Controllers
         }
 
         // GET: Customers/Delete/5
+        [Authorize(Roles = "Директор,Заместитель директора, Старший продавец")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

@@ -17,8 +17,10 @@
             </select>
         </div>
         <div>
-            <button id="create-customer-btn" class="btn btn-secondary">Добавить нового покупателя</button>
+            <a asp-area="" asp-controller="Customers" asp-action="Create"> <button id="create-customer-btn" class="btn btn-secondary">Добавить нового покупателя</button></a>
+           
             <button id="continue-without-customer" class="btn btn-primary">Продолжить без покупателя</button>
+
         </div>
         <div id="create-customer-form" style="display: none; margin-top: 20px;">
             <h4>Новый покупатель</h4>

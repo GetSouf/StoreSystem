@@ -120,3 +120,92 @@ h3 a {
         position: relative;
         transition: color 0.3s ease;
     }
+/* Центровка всей страницы */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+    font-family: 'Arial', sans-serif;
+    color: whi;
+}
+
+/* Стили для формы */
+.login-form {
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+    /* Заголовок */
+    .login-form h2 {
+        font-size: 1.8rem;
+        color: #343a40;
+        margin-bottom: 20px;
+    }
+
+    /* Поля ввода */
+    .login-form input[type="text"],
+    .login-form input[type="password"] {
+        width: 100%;
+        padding: 10px 15px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+    /* Фокус для полей */
+    .login-form input:focus {
+        border-color: #258cfb;
+        box-shadow: 0 0 5px rgba(37, 140, 251, 0.5);
+    }
+
+    /* Кнопка */
+    .login-form button {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        background-color: #258cfb;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .login-form button:hover {
+            background-color: #0056b3;
+        }
+
+    /* Ссылка на регистрацию */
+    .login-form p {
+        font-size: 14px;
+        color: #007bff;
+        margin-top: 15px;
+    }
+
+        .login-form p a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+            .login-form p a:hover {
+                color: #0056b3;
+                text-decoration: underline;
+            }
+.fc-event-title {
+    font-size: 12px; 
+    white-space: nowrap;
+    overflow: hidden; 
+    text-overflow: ellipsis;
+}

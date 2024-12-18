@@ -1,15 +1,15 @@
 ﻿@model User
 
-<h2>Вход</h2>
-<p>Нет учётной записи? <a asp-action="Register">Зарегистрируйтесь здесь</a>.</p>
-<form asp-action="Login" method="post">
-    <div>
-        <label>Логин</label>
-        <input type="text" name="username" required />
-    </div>
-    <div>
-        <label>Пароль</label>
-        <input type="password" name="password" required />
-    </div>
-    <button type="submit">Войти</button>
-</form>
+<div class="login-container">
+    <form class="login-form" asp-action="Login" method="post">
+        <h2>Вход</h2>
+        <p>Нет учётной записи? <a asp-action="Register">Зарегистрируйтесь здесь</a>.</p>
+        <div>
+            <input type="text" name="username" placeholder="Логин" required />
+        </div>
+        <div>
+            <input type="password" name="password" placeholder="Пароль" required />
+        </div>
+        <button type="submit">Войти</button>
+    </form>
+</div>

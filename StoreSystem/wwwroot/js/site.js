@@ -8,8 +8,8 @@
     const steps = document.querySelectorAll(".step");
     const prevBtn = document.getElementById("prev-step-btn");
     const nextBtn = document.getElementById("next-step-btn");
-    let currentStep = 0;
 
+    let currentStep = 0;
 
     const cartItems = {};
     function updateSteps() {
@@ -19,13 +19,15 @@
         });
         prevBtn.style.display = currentStep === 0 ? "none" : "inline-block";
         nextBtn.style.display = currentStep === steps.length - 1 ? "none" : "inline-block";
-        if (currentStep === 3) {
+        if (currentStep == 3) {
             updateOrderSummary();
             currentStep = 0; 
             updateSteps();
 
         }
     }
+    
+    
 
     // События кнопок
     prevBtn.addEventListener("click", () => {
@@ -41,6 +43,7 @@
 
     // Изначально показать первый шаг
     updateSteps();
+
 
     // Функция обновления корзины
     function updateCart() {
@@ -94,6 +97,7 @@
             });
         });
     }
+    
 
     // Обновление количества товара на складе
     function updateStock(id, change) {
@@ -269,4 +273,5 @@
                 alert("Произошла ошибка при изменении статуса.");
             });
     }
+   
 });

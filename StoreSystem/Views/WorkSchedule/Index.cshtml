@@ -1,0 +1,141 @@
+﻿@model IEnumerable<StoreSystem.Models.WorkSchedule>
+@using StoreSystem.Models
+
+@{
+    ViewData["Title"] = "Work Schedule";
+}
+
+<h1>График работы</h1>
+
+<div class="calendar-container">
+
+    <div class="filter-panel mb-3">
+        <label for="employee-filter">Фильтр по сотруднику:</label>
+        <select id="employee-filter" class="form-control">
+            <option value="">Все сотрудники</option>
+            @foreach (var employee in Model.Select(ws => ws.Employee).Distinct())
+            {
+                <option value="@employee.Id">@employee.FirstName @employee.LastName</option>
+            }
+        </select>
+    </div>
+
+  
+    <div id="calendar" class="calendar"></div>
+</div>
+
+<div id="edit-shift-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Изменить смену</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-shift-form" method="post" asp-action="AddShift">
+                    <input type="hidden" id="shift-id" name="shiftId" />
+                    <div class="form-group">
+                        <label for="edit-employee">Сотрудник</label>
+                        <select id="edit-employee" name="employeeId" class="form-control" required>
+                            @foreach (var employee in Model.Select(ws => ws.Employee).Distinct())
+                            {
+                                <option value="@employee.Id">@employee.FirstName @employee.LastName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-shift-date">Дата смены</label>
+                        <input type="date" id="edit-shift-date" name="shiftDate" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-start-time">Начало</label>
+                        <input type="time" id="edit-start-time" name="startTime" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-end-time">Окончание</label>
+                        <input type="time" id="edit-end-time" name="endTime" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-notes">Заметки</label>
+                        <textarea id="edit-notes" name="notes" class="form-control"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+         
+            const scheduleData = @Html.Raw(Json.Serialize(Model.Select(ws => new
+            {
+                id = ws.Id,
+                employeeName = ws.Employee.FirstName + " " + ws.Employee.LastName,
+                shiftDate = ws.ShiftDate.ToString("yyyy-MM-dd"),
+                startTime = ws.StartTime.ToString(@"hh\:mm"),
+                endTime = ws.EndTime.ToString(@"hh\:mm"),
+                notes = ws.Notes
+            })));
+
+            const calendarEl = document.getElementById('calendar');
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'ru',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: scheduleData.map(shift => ({
+                    id: shift.id,
+                    title: `${shift.employeeName}: ${shift.startTime} - ${shift.endTime}`,
+                    start: `${shift.shiftDate}T${shift.startTime}`,
+                    end: `${shift.shiftDate}T${shift.endTime}`,
+                    extendedProps: {
+                        notes: shift.notes
+                    }
+                })),
+                eventClick: function (info) {
+                    const event = info.event;
+                    const props = event.extendedProps;
+
+                 
+                    document.getElementById('shift-id').value = event.id;
+                    document.getElementById('edit-employee').value = event.title.split(':')[0].trim();
+                    document.getElementById('edit-shift-date').value = event.startStr.split('T')[0];
+                    document.getElementById('edit-start-time').value = event.startStr.split('T')[1];
+                    document.getElementById('edit-end-time').value = event.endStr.split('T')[1];
+                    document.getElementById('edit-notes').value = props.notes;
+
+                    $('#edit-shift-modal').modal('show');
+                },
+                eventContent: function (info) {
+                  
+                    const count = scheduleData.filter(s => s.shiftDate === info.event.startStr.split('T')[0]).length;
+                    return { html: `${info.event.title} <br> Сотрудников: ${count}` };
+                }
+            });
+
+            calendar.render();
+
+         
+            document.getElementById('employee-filter').addEventListener('change', function () {
+                const selectedEmployee = this.value;
+                calendar.getEvents().forEach(event => {
+                    if (selectedEmployee === "" || event.title.includes(selectedEmployee)) {
+                        event.setProp('display', 'auto');
+                    } else {
+                        event.setProp('display', 'none');
+                    }
+                });
+            });
+        });
+    </script>
+}

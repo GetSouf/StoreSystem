@@ -20,13 +20,14 @@ namespace testproject.Models
         public DbSet<Supplier> Suppliers { get; set; } = null!;
         public DbSet<ProductSupplier> ProductSuppliers { get; set; } = null!;
         public DbSet<Rating> Ratings { get; set; } = null!;
+        public DbSet<WorkSchedule> WorkSchedules { get; set; } = null!;
         public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // ProductSupplier: связь многие-ко-многим между Product и Supplier
+         
             modelBuilder.Entity<ProductSupplier>()
                 .HasKey(ps => ps.Id);
 
@@ -42,14 +43,13 @@ namespace testproject.Models
                 .HasForeignKey(ps => ps.SupplierId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Category: связь для подкатегорий
+         
             modelBuilder.Entity<Category>()
                 .HasOne(c => c.ParentCategory)
                 .WithMany(c => c.SubCategories)
                 .HasForeignKey(c => c.ParentCategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // OrderDetail: связь многие-ко-многим между Order и Product
             modelBuilder.Entity<OrderDetail>()
                 .HasKey(od => od.Id);
 
@@ -65,7 +65,7 @@ namespace testproject.Models
                 .HasForeignKey(od => od.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Rating: связь между Customer и Product
+   
             modelBuilder.Entity<Rating>()
                 .HasKey(r => r.Id);
 
@@ -77,14 +77,13 @@ namespace testproject.Models
                 .HasForeignKey(r => r.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Employee: связь с Post (должностью)
+     
             modelBuilder.Entity<Employee>()
                 .HasOne(e => e.Post)
                 .WithMany(p => p.Employees)
                 .HasForeignKey(e => e.PostId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Order: связь с Customer и Employee
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.Customer)
                 .WithMany(c => c.Orders)
@@ -93,13 +92,13 @@ namespace testproject.Models
 
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.Category)
-                 .WithMany(c => c.Products) // Убедитесь, что в модели `Category` есть коллекция `Products`
+                 .WithMany(c => c.Products) 
                  .HasForeignKey(p => p.CategoryId)
                  .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Order>()
                 .Property(o => o.OrderDate)
                 .HasConversion(
-                     v => v.ToUniversalTime(), // Преобразование в UTC перед сохранением
+                     v => v.ToUniversalTime(), 
                      v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
         }
     }

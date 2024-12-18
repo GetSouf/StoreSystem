@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using testproject.Models;
@@ -11,9 +12,11 @@ using testproject.Models;
 namespace StoreSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241218073446_work-shedule-adding-migration_3try3")]
+    partial class worksheduleaddingmigration_3try3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -323,37 +326,6 @@ namespace StoreSystem.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("StoreSystem.Models.WorkSchedule", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("integer");
-
-                    b.Property<TimeSpan>("EndTime")
-                        .HasColumnType("interval");
-
-                    b.Property<string>("Notes")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<DateTime>("ShiftDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<TimeSpan>("StartTime")
-                        .HasColumnType("interval");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.ToTable("WorkSchedules");
-                });
-
             modelBuilder.Entity("testproject.Models.Customer", b =>
                 {
                     b.Property<int>("Id")
@@ -518,17 +490,6 @@ namespace StoreSystem.Migrations
                     b.Navigation("Employee");
 
                     b.Navigation("Post");
-                });
-
-            modelBuilder.Entity("StoreSystem.Models.WorkSchedule", b =>
-                {
-                    b.HasOne("StoreSystem.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("StoreSystem.Models.Category", b =>

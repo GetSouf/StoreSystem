@@ -16,18 +16,18 @@ namespace StoreSystem.Models
         [Required]
         [MinLength(6, ErrorMessage = "Пароль должен быть не менее 6 символов.")]
         [MaxLength(100)]
-        public string PasswordHash { get; set; } = null!; // Захэшированный пароль
+        public string PasswordHash { get; set; } = null!; 
 
         [Required]
         public int PostId { get; set; }
 
         [ForeignKey("PostId")]
-        public Post Post { get; set; } = null!; // Навигационное свойство для роли
+        public Post Post { get; set; } = null!; 
 
         [Required]
-        public int EmployeeId { get; set; } // Внешний ключ для работника
+        public int EmployeeId { get; set; }
 
         [ForeignKey("EmployeeId")]
-        public Employee Employee { get; set; } = null!; // Навигационное свойство для работника
+        public Employee Employee { get; set; } = null!; 
     }
 }

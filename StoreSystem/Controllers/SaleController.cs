@@ -78,7 +78,7 @@ namespace StoreSystem.Controllers
 
         }
         [HttpPost]
-        public IActionResult CreateOrder(int customerId, int employeeId, [FromBody] List<OrderDetail> orderDetails)
+        public IActionResult CreateOrder(int? customerId, int employeeId, [FromBody] List<OrderDetail> orderDetails)
         {
             Console.WriteLine($"CustomerId: {customerId}, EmployeeId: {employeeId}");
            
