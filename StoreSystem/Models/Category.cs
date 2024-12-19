@@ -6,18 +6,18 @@ namespace StoreSystem.Models
     public class Category
     {
         [Key]
-        public int Id { get; set; } // Уникальный идентификатор категории
+        public int Id { get; set; } 
 
         [Required]
         [MaxLength(100)]
-        public string Name { get; set; } = null!; // Название категории
+        public string Name { get; set; } = null!; 
 
-        public int? ParentCategoryId { get; set; } // Родительская категория (если есть)
+        public int? ParentCategoryId { get; set; } 
 
         [ForeignKey("ParentCategoryId")]
-        public Category? ParentCategory { get; set; } // Навигационное свойство
+        public Category? ParentCategory { get; set; } 
 
-        public ICollection<Category> SubCategories { get; set; } = new List<Category>(); // Подкатегории
-        public ICollection<Product> Products { get; set; } = new List<Product>(); // Товары в категории
+        public ICollection<Category> SubCategories { get; set; } = new List<Category>(); 
+        public ICollection<Product> Products { get; set; } = new List<Product>(); 
     }
 }

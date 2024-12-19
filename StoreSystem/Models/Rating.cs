@@ -7,28 +7,28 @@ namespace StoreSystem.Models
     public class Rating
     {
         [Key]
-        public int Id { get; set; } // Уникальный идентификатор отзыва
+        public int Id { get; set; } 
 
         [Required]
-        public int CustomerId { get; set; } // Связь с клиентом
+        public int CustomerId { get; set; } 
 
         [ForeignKey("CustomerId")]
-        public Customer Customer { get; set; } = null!; // Навигационное свойство
+        public Customer Customer { get; set; } = null!; 
 
         [Required]
-        public int ProductId { get; set; } // Связь с товаром
+        public int ProductId { get; set; } /
 
         [ForeignKey("ProductId")]
-        public Product Product { get; set; } = null!; // Навигационное свойство
+        public Product Product { get; set; } = null!; 
 
         [Required]
         [Range(1, 5)]
-        public int RatingValue { get; set; } // Оценка (1-5)
+        public int RatingValue { get; set; } 
 
         [MaxLength(500)]
-        public string? Comment { get; set; } // Текст отзыва
+        public string? Comment { get; set; } 
 
         [Required]
-        public DateTime RatingDate { get; set; } // Дата отзыва
+        public DateTime RatingDate { get; set; } 
     }
 }

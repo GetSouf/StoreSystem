@@ -120,7 +120,7 @@ h3 a {
         position: relative;
         transition: color 0.3s ease;
     }
-/* Центровка всей страницы */
+
 .login-container {
     display: flex;
     justify-content: center;
@@ -143,14 +143,13 @@ h3 a {
     text-align: center;
 }
 
-    /* Заголовок */
+
     .login-form h2 {
         font-size: 1.8rem;
         color: #343a40;
         margin-bottom: 20px;
     }
 
-    /* Поля ввода */
     .login-form input[type="text"],
     .login-form input[type="password"] {
         width: 100%;
@@ -185,7 +184,7 @@ h3 a {
             background-color: #0056b3;
         }
 
-    /* Ссылка на регистрацию */
+
     .login-form p {
         font-size: 14px;
         color: #007bff;
@@ -204,8 +203,32 @@ h3 a {
                 text-decoration: underline;
             }
 .fc-event-title {
-    font-size: 12px; 
+    font-size: 5px; 
     white-space: nowrap;
     overflow: hidden; 
     text-overflow: ellipsis;
+}
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Расстояние между кнопками и полем */
+}
+
+.quantity-input {
+    width: 50px; /* Ширина текстового поля */
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    font-size: 1rem;
+}
+
+.btn.decrease, .btn.increase {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    padding: 0;
 }

@@ -10,26 +10,26 @@ namespace testproject.Models
     public class Customer
     {
         [Key]
-        public int Id { get; set; } // Уникальный идентификатор клиента
+        public int Id { get; set; } 
 
         [Required]
         [MaxLength(50)]
-        public string FirstName { get; set; } = null!; // Имя
+        public string FirstName { get; set; } = null!; 
 
         [Required]
         [MaxLength(50)]
-        public string LastName { get; set; } = null!; // Фамилия
+        public string LastName { get; set; } = null!; 
 
         [Required]
         [MaxLength(100)]
         [EmailAddress]
-        public string Email { get; set; } = null!; // Электронная почта
+        public string Email { get; set; } = null!; 
 
         [MaxLength(15)]
-        public string? Phone { get; set; } // Телефон
+        public string? Phone { get; set; } 
 
         [MaxLength(200)]
-        public string? Address { get; set; } // Адрес
+        public string? Address { get; set; } 
 
         [Required]
 
@@ -37,7 +37,7 @@ namespace testproject.Models
 
 
 
-        public ICollection<Order> Orders { get; set; } = new List<Order>(); // Связь с заказами
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
 
 
 

@@ -195,13 +195,11 @@ public class AccountController : Controller
         var fileName = $"{Guid.NewGuid()}_{profilePicture.FileName}";
         var filePath = Path.Combine("wwwroot/images/", fileName);
 
-        // Сохранение файла
         using (var stream = new FileStream(filePath, FileMode.Create))
         {
             await profilePicture.CopyToAsync(stream);
         }
 
-        // Обновление базы данных
         var userId = int.Parse(User.FindFirst("EmployeeId")?.Value!);
         var employee = _context.Employees.FirstOrDefault(e => e.Id == userId);
 

@@ -23,8 +23,6 @@ namespace StoreSystem.Controllers
         {
             _context = context;
         }
-
-        // Страница с кнопками для выбора отчётов
         public IActionResult Index()
         {
             return View();
@@ -59,11 +57,10 @@ namespace StoreSystem.Controllers
                     EmployeeName = g.Key.FirstName,
                     SalesCount = g.Count(),
                     TotalRevenue = g.Sum(o => o.TotalAmount),
-                    OrderDates = g.Select(o => o.OrderDate).ToList() // Даты заказов для сортировки
+                    OrderDates = g.Select(o => o.OrderDate).ToList() 
                 })
                 .ToListAsync();
 
-            // Сортировка
             employeeReport = sortOrder switch
             {
                 "name_desc" => employeeReport.OrderByDescending(e => e.EmployeeName).ToList(),
@@ -100,12 +97,10 @@ namespace StoreSystem.Controllers
             using var package = new ExcelPackage();
             var worksheet = package.Workbook.Worksheets.Add("Employee Report");
 
-            // Заголовки
             worksheet.Cells[1, 1].Value = "Имя сотрудника";
             worksheet.Cells[1, 2].Value = "Кол-во продаж";
             worksheet.Cells[1, 3].Value = "Общий оборот";
 
-            // Данные
             for (int i = 0; i < employeeReport.Count; i++)
             {
                 worksheet.Cells[i + 2, 1].Value = employeeReport[i].EmployeeName;
@@ -113,7 +108,6 @@ namespace StoreSystem.Controllers
                 worksheet.Cells[i + 2, 3].Value = employeeReport[i].TotalRevenue;
             }
 
-            // Генерация файла
             var stream = new MemoryStream();
             package.SaveAs(stream);
             stream.Position = 0;
@@ -142,12 +136,10 @@ namespace StoreSystem.Controllers
 
             document.Open();
 
-            // Заголовок
             var fontTitle = FontFactory.GetFont("Arial", 16, Font.BOLD);
             document.Add(new Paragraph("Отчёт по сотрудникам", fontTitle));
             document.Add(new Paragraph(" "));
 
-            // Таблица
             var table = new PdfPTable(3);
             table.AddCell("Имя сотрудника");
             table.AddCell("Кол-во продаж");
@@ -232,7 +224,6 @@ namespace StoreSystem.Controllers
         }
         public async Task<IActionResult> ProductSalesReport(string sortOrder)
         {
-            // Параметры для сортировки
             ViewData["ProductSortParam"] = string.IsNullOrEmpty(sortOrder) ? "product_desc" : "";
             ViewData["CategorySortParam"] = sortOrder == "category" ? "category_desc" : "category";
             ViewData["SupplierSortParam"] = sortOrder == "supplier" ? "supplier_desc" : "supplier";
@@ -241,7 +232,6 @@ namespace StoreSystem.Controllers
             ViewData["SalesCountSortParam"] = sortOrder == "sales_count" ? "sales_count_desc" : "sales_count";
             ViewData["AverageRatingSortParam"] = sortOrder == "rating" ? "rating_desc" : "rating"; // Новый параметр
 
-            // Запрос с использованием навигационных свойств
             var productSalesQuery = _context.OrderDetails
                 .Include(od => od.Product)
                     .ThenInclude(p => p.Category)
@@ -273,7 +263,6 @@ namespace StoreSystem.Controllers
                     AverageRating = Math.Round(g.Key.AverageRating, 2)
                 });
 
-            // Сортировка
             productSalesQuery = sortOrder switch
             {
                 "product_desc" => productSalesQuery.OrderByDescending(p => p.ProductName),
@@ -287,8 +276,8 @@ namespace StoreSystem.Controllers
                 "quantity_desc" => productSalesQuery.OrderByDescending(p => p.QuantitySold),
                 "sales_count" => productSalesQuery.OrderBy(p => p.SalesCount),
                 "sales_count_desc" => productSalesQuery.OrderByDescending(p => p.SalesCount),
-                "rating" => productSalesQuery.OrderBy(p => p.AverageRating), // Сортировка по средней оценке
-                "rating_desc" => productSalesQuery.OrderByDescending(p => p.AverageRating), // Обратная сортировка
+                "rating" => productSalesQuery.OrderBy(p => p.AverageRating), 
+                "rating_desc" => productSalesQuery.OrderByDescending(p => p.AverageRating), 
                 _ => productSalesQuery.OrderBy(p => p.ProductName),
             };
 

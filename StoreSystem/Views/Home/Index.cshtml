@@ -1,16 +1,14 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+
 @if (User.Identity.IsAuthenticated)
 {
     <div class="text-center">
         <h1 class="display-4">Welcome to Electronics Store System</h1>
         <p class="lead">Efficiently manage your store operations with ease!</p>
     </div>
-}
 
-@if (User.Identity.IsAuthenticated)
-{
     <div class="container mt-5">
         <div class="button-grid">
             <div class="button-item">
@@ -26,7 +24,7 @@
                 <a asp-controller="Customers" asp-action="Index" class="btn btn-info">Customer Management</a>
             </div>
             <div class="button-item">
-                <a asp-controller="Suppliers" asp-action="Index" class="btn btn-warning">Manage Suppliers</a>
+                <a asp-controller="Suppliers" asp-action="Index" class="btn btn-success">Manage Suppliers</a>
             </div>
             <div class="button-item">
                 <a asp-controller="Reports" asp-action="Index" class="btn btn-dark">Generate Reports</a>
@@ -35,17 +33,33 @@
                 <a asp-controller="Sale" asp-action="Sale" class="btn btn-success">Sale</a>
             </div>
             <div class="button-item">
-                <a asp-controller="WorkSchedule" asp-action="Index" class="btn btn-success">Work Schedule</a>
+                <a asp-controller="WorkSchedule" asp-action="Index" class="btn btn-warning">Work Schedule</a>
             </div>
+            <div class="button-item">
+                <a asp-controller="Customers" asp-action="Create" class="btn btn-warning">Create customer</a>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="fullscreen-vacancies">
+        <div class="content">
+            <h1 class="display-3">Welcome to the Electronics Store!</h1>
+            <p class="lead">
+                We are actively looking for talented professionals to join our team. Explore our open positions and become part of our success!
+            </p>
+            <a href="https://example.com/careers" class="btn btn-primary btn-lg" target="_blank">View Vacancies</a>
         </div>
     </div>
 }
 
 <style>
+    /* Стиль для кнопок */
     .btn {
-        font-size: 1.25rem; 
-        padding: 1rem; 
-        border-radius: 15px; 
+        font-size: 1.25rem;
+        padding: 1rem;
+        border-radius: 15px;
         transition: all 0.3s ease-in-out;
         display: flex;
         align-items: center;
@@ -56,17 +70,17 @@
     }
 
         .btn:hover {
-            transform: scale(1.05); 
+            transform: scale(1.05);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .btn:active {
-            transform: scale(0.95); 
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); 
+            transform: scale(0.95);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
     .container {
-        max-width: 100%; 
+        max-width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -74,13 +88,44 @@
 
     .button-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         gap: 20px;
         width: 100%;
     }
 
     .button-item {
         display: flex;
-        justify-content: center; 
+        justify-content: center;
     }
+
+    /* Стиль для секции вакансий */
+    .fullscreen-vacancies {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f8f9fa;
+        text-align: center;
+        padding: 20px;
+    }
+
+        .fullscreen-vacancies .content {
+            max-width: 800px;
+        }
+
+        .fullscreen-vacancies h1 {
+            font-size: 3rem;
+            color: #343a40;
+        }
+
+        .fullscreen-vacancies p {
+            font-size: 1.5rem;
+            color: #6c757d;
+            margin: 20px 0;
+        }
+
+        .fullscreen-vacancies .btn {
+            font-size: 1.5rem;
+            padding: 15px 30px;
+        }
 </style>

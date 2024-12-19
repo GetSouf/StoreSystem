@@ -73,7 +73,6 @@
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-         
             const scheduleData = @Html.Raw(Json.Serialize(Model.Select(ws => new
             {
                 id = ws.Id,
@@ -106,26 +105,34 @@
                     const event = info.event;
                     const props = event.extendedProps;
 
-                 
                     document.getElementById('shift-id').value = event.id;
                     document.getElementById('edit-employee').value = event.title.split(':')[0].trim();
                     document.getElementById('edit-shift-date').value = event.startStr.split('T')[0];
-                    document.getElementById('edit-start-time').value = event.startStr.split('T')[1];
-                    document.getElementById('edit-end-time').value = event.endStr.split('T')[1];
+                    document.getElementById('edit-start-time').value = event.startStr.split('T')[1].substring(0, 5);
+                    document.getElementById('edit-end-time').value = event.endStr.split('T')[1].substring(0, 5);
                     document.getElementById('edit-notes').value = props.notes;
 
                     $('#edit-shift-modal').modal('show');
                 },
                 eventContent: function (info) {
-                  
-                    const count = scheduleData.filter(s => s.shiftDate === info.event.startStr.split('T')[0]).length;
-                    return { html: `${info.event.title} <br> Сотрудников: ${count}` };
+                    const startTime = info.event.startStr.split('T')[1].substring(0, 5);
+                    const endTime = info.event.endStr.split('T')[1].substring(0, 5);
+                    const shiftsOnSameDay = scheduleData.filter(s => s.shiftDate === info.event.startStr.split('T')[0]);
+
+                    const content = `
+                        <div>
+                            ${info.event.title.split(':')[0].trim()}<br>
+                            ${startTime} - ${endTime}<br>
+
+                        </div>
+                    `;
+
+                    return { html: content };
                 }
             });
 
             calendar.render();
 
-         
             document.getElementById('employee-filter').addEventListener('change', function () {
                 const selectedEmployee = this.value;
                 calendar.getEvents().forEach(event => {
@@ -137,5 +144,35 @@
                 });
             });
         });
+
+
     </script>
 }
+<style>
+    body {
+        background-color: #f9f9f9;
+    }
+
+    .calendar-container {
+        padding: 20px;
+
+    }
+
+    .filter-panel {
+        border: 1px solid #ddd;
+    }
+
+    .calendar {
+        background-color: #fff;
+        padding: 10px;
+
+    }
+
+    .modal-content {
+        border-radius: 10px;
+    }
+
+    .fc-event-title {
+        font-size: 0.9rem;
+    }
+</style>

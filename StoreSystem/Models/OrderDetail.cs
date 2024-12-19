@@ -6,26 +6,26 @@ namespace StoreSystem.Models
     public class OrderDetail
     {
         [Key]
-        public int Id { get; set; } // Уникальный идентификатор записи
+        public int Id { get; set; } 
 
         [Required]
-        public int OrderId { get; set; } // Связь с заказом
+        public int OrderId { get; set; } 
 
         [ForeignKey("OrderId")]
-        public Order Order { get; set; } = null!; // Навигационное свойство
+        public Order Order { get; set; } = null!; 
 
         [Required]
-        public int ProductId { get; set; } // Связь с товаром
+        public int ProductId { get; set; } 
 
         [ForeignKey("ProductId")]
-        public Product Product { get; set; } = null!; // Навигационное свойство
+        public Product Product { get; set; } = null!;
 
         [Required]
-        public int Quantity { get; set; } // Количество товара
+        public int Quantity { get; set; } 
 
         [Required]
         [Range(0.01, double.MaxValue)]
-        public decimal Price { get; set; } // Цена за единицу товара на момент заказа
+        public decimal Price { get; set; } 
     }
 
 }
